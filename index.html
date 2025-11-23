@@ -1,0 +1,1247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reward Hub · MWA LegacyBuilt Tech</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#6b3df5" />
+  <style>
+    :root {
+      --purple:#6b3df5;
+      --gold:#f5c453;
+      --bg:#05040b;
+      --text:#f9f5ff;
+      --muted:#a6a1c4;
+      --radius:18px;
+      --shadow:0 16px 34px rgba(0,0,0,0.65);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#25194b 0,#05040b 55%,#020107 100%);
+      color:var(--text);
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      padding:14px 16px 10px;
+      background:linear-gradient(135deg,#6b3df5,#f5c453);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 14px 30px rgba(0,0,0,0.7);
+    }
+    .logo{
+      width:32px;height:32px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 20%,#f5c453,#6b3df5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.1rem;
+      font-weight:800;
+      color:#1b102e;
+    }
+    header h1{
+      margin:0;
+      font-size:1.15rem;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+    }
+    header p{
+      margin:2px 0 0;
+      font-size:0.78rem;
+      opacity:0.92;
+    }
+    main{
+      padding:18px 14px 90px;
+      max-width:860px;
+      margin:0 auto;
+    }
+    .screen{display:none;}
+    .screen.active{display:block;}
+    .card{
+      background:linear-gradient(145deg,rgba(255,255,255,0.02),rgba(14,12,30,0.98));
+      border-radius:var(--radius);
+      padding:16px 16px 14px;
+      margin-bottom:16px;
+      border:1px solid rgba(245,196,83,0.16);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0 0 6px;
+      font-size:1rem;
+    }
+    .muted{color:var(--muted);font-size:0.8rem;}
+    .pill{
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:0.7rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      background:rgba(0,0,0,0.5);
+      color:#f5e8b6;
+    }
+    .points-main{
+      font-size:2.1rem;
+      font-weight:780;
+      color:var(--gold);
+      margin:4px 0 0;
+    }
+    .sub-points{
+      font-size:0.78rem;
+      color:var(--muted);
+      margin-top:4px;
+    }
+    .btn{
+      display:inline-block;
+      border:none;
+      border-radius:12px;
+      padding:9px 13px;
+      font-size:0.86rem;
+      font-weight:650;
+      cursor:pointer;
+      margin-top:8px;
+      background:var(--purple);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(107,61,245,0.6);
+      text-decoration:none;
+    }
+    .btn.secondary{
+      background:transparent;
+      color:var(--gold);
+      border:1px solid rgba(245,196,83,0.5);
+      box-shadow:none;
+    }
+    .btn.small{
+      padding:7px 11px;
+      font-size:0.78rem;
+      box-shadow:none;
+    }
+    .challenge{
+      background:rgba(9,7,22,0.92);
+      border-radius:12px;
+      padding:9px 10px;
+      margin-bottom:9px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      position:relative;
+    }
+    .challenge-main{flex:1;}
+    .challenge-title{font-size:0.9rem;font-weight:600;}
+    .challenge-meta{font-size:0.78rem;color:var(--muted);margin-top:2px;}
+    .challenge-side{text-align:right;font-size:0.78rem;}
+    .challenge-points{color:var(--gold);font-weight:700;}
+    .check-hint{color:var(--muted);font-size:0.7rem;}
+    .challenge.done .challenge-title{text-decoration:line-through;opacity:0.7;}
+    .lock-label{
+      font-size:0.7rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:#f3d99a;
+      margin-bottom:6px;
+    }
+    .locked{opacity:0.32;pointer-events:none;}
+    .locked::after{
+      content:"Locked · Upgrade to access";
+      position:absolute;
+      inset:auto 0 0 0;
+      font-size:0.68rem;
+      padding:5px 9px;
+      background:linear-gradient(90deg,rgba(0,0,0,0.9),transparent);
+      color:#f5e2ad;
+    }
+    .rules-list{
+      font-size:0.78rem;
+      color:var(--muted);
+      padding-left:18px;
+      margin:6px 0;
+    }
+    .rules-list li{margin-bottom:4px;}
+    .tier-title{font-weight:700;}
+    footer.app-foot{
+      text-align:center;
+      font-size:0.68rem;
+      color:var(--muted);
+      margin-top:6px;
+    }
+    footer.app-foot span{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      font-weight:600;
+    }
+    .bottom-nav{
+      position:fixed;
+      left:0;right:0;bottom:0;
+      display:flex;
+      background:rgba(5,4,15,0.98);
+      border-top:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(20px);
+      z-index:20;
+    }
+    .nav-item{
+      flex:1;
+      text-align:center;
+      padding:6px 2px 4px;
+      font-size:0.7rem;
+      color:var(--muted);
+      cursor:pointer;
+    }
+    .nav-item span{
+      display:block;
+      font-size:1.2rem;
+      margin-bottom:1px;
+    }
+    .nav-item.active{color:var(--gold);font-weight:600;}
+    .tag{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.05);
+      color:#e9e4ff;
+      font-size:0.72rem;
+      margin-right:6px;
+      margin-top:4px;
+    }
+    .field-label{font-size:0.78rem;font-weight:600;margin-bottom:3px;}
+    .field-input{
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.16);
+      background:rgba(0,0,0,0.45);
+      color:var(--text);
+      font-size:0.84rem;
+      margin-bottom:7px;
+    }
+    .field-input:focus{
+      outline:none;
+      border-color:var(--gold);
+      box-shadow:0 0 0 1px rgba(245,196,83,0.5);
+    }
+    .growth-hidden{display:none;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">👑</div>
+    <div>
+      <h1>Reward Hub</h1>
+      <p>Purple crown challenge system for any marketer · Built by MWA LegacyBuilt Tech.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="screen-dashboard" class="screen active">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+          <div>
+            <h2>Today&apos;s momentum</h2>
+            <div class="muted" id="modeInfo">
+              Free mode · You&apos;re earning credits only. Upgrade to unlock real payout points.
+            </div>
+          </div>
+          <span class="pill" id="tierPill">Free tier</span>
+        </div>
+        <div class="points-main" id="pointsToday">0</div>
+        <div class="sub-points" id="subPointsLine">Today: 0 credits · Lifetime: 0 credits</div>
+        <div class="sub-points" id="streakLine">Streak: 0 days</div>
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="btn small" onclick="switchScreen('challenges')">Open daily challenges</button>
+          <button class="btn small secondary" id="resetBtn">New day · refresh checklist</button>
+        </div>
+        <p class="muted" style="margin-top:8px;font-size:0.76rem;">
+          The reset button refreshes the visual checklist. It does not let anyone re-earn the same task twice in one day.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>How this works</h2>
+        <ul class="rules-list">
+          <li>Free tier = <strong>credits only</strong>. No cashouts. Use it to build habits and momentum.</li>
+          <li>When you upgrade to Starter, Pro, or Elite, your credits reset to zero and you start earning real payout points.</li>
+          <li>Each task is tappable <strong>once per calendar day</strong> on that device.</li>
+          <li>Weekly &amp; monthly missions grow as your streak grows. At 7 days, you unlock Growth Mode missions.</li>
+        </ul>
+      </div>
+
+      <footer class="app-foot">
+        Powered by <span>MWA LegacyBuilt Tech</span> · Wi-Fi, willpower, and work that actually pays.
+      </footer>
+    </section>
+
+    <!-- CHALLENGES -->
+    <section id="screen-challenges" class="screen">
+      <div class="card">
+        <h2>Daily challenge board</h2>
+        <p class="muted">
+          Simple, generic income-producing actions for any model — digital, affiliate, MLM/NWM, coaching, UGC, party plan, or product.
+        </p>
+      </div>
+
+      <!-- FREE TIER: 10 tasks -->
+      <div class="card">
+        <div class="lock-label">Free tier · Included for everyone · Credits only, no cashouts</div>
+
+        <div class="challenge" data-id="f1" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Post 1 value-based piece of content</div>
+            <div class="challenge-meta">Teach a simple lesson, tell a story, or drop a truth that helps your audience today.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+            <div class="check-hint">Tap to mark done</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f2" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Have 3 real conversations</div>
+            <div class="challenge-meta">Three genuine DMs or comment threads — not spam, not copy/paste scripts.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f3" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Engage on 10 posts</div>
+            <div class="challenge-meta">Leave thoughtful comments on posts from ideal clients, customers, or partners.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f4" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Post 1 story or behind-the-scenes</div>
+            <div class="challenge-meta">Use stories to show the human behind your business, not just the offer.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f5" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Comment inside one niche group</div>
+            <div class="challenge-meta">Add value in a community where your ideal people already hang out.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f6" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Reply to an old conversation</div>
+            <div class="challenge-meta">Re-open one DM or thread from the past 30 days.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f7" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Share a micro proof moment</div>
+            <div class="challenge-meta">Share a small win, shift, testimonial, or “I’m not who I was a year ago” moment.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f8" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Clean up 1 piece of content</div>
+            <div class="challenge-meta">Fix a caption, headline, or call to action on something already posted.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f9" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Add 3 new aligned people</div>
+            <div class="challenge-meta">Friends, followers, or connections that actually fit your world.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="f10" data-points="10">
+          <div class="challenge-main">
+            <div class="challenge-title">Share 1 soft CTA in stories</div>
+            <div class="challenge-meta">Invite people to message you, vote, or ask for info — no pressure, just options.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+10 credits</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STARTER TIER: 10 tasks -->
+      <div class="card tier-starter locked">
+        <div class="lock-label">Starter tier · Subscription required · Real payout points</div>
+
+        <div class="challenge" data-id="s1" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Invite 2 people to your main info</div>
+            <div class="challenge-meta">Send your video, page, or overview link to two qualified humans today.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s2" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Post with a clear call to action</div>
+            <div class="challenge-meta">End your post with a direct “message me”, “comment”, or “tap for info”.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s3" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Share a win or story post</div>
+            <div class="challenge-meta">Show how life, income, mindset, or confidence is shifting — yours or a client’s.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s4" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Follow up with 2 warm leads</div>
+            <div class="challenge-meta">Circle back with people who already asked for info or liked your last offer post.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s5" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Check your insights</div>
+            <div class="challenge-meta">Take a screenshot of your reach, views, or engagement to track growth over time.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s6" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Post with your face in it</div>
+            <div class="challenge-meta">Selfie, video, or live photo — people buy from humans, not logos.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s7" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Send 3 warm voice notes</div>
+            <div class="challenge-meta">Three real check-ins or follow-ups using your actual voice, not just text.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s8" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Share a “life looks different now” story</div>
+            <div class="challenge-meta">Talk about what’s changed for you — time, money, peace, energy, or options.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s9" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Add 5 new aligned people</div>
+            <div class="challenge-meta">Grow your audience with humans who actually fit your world and offers.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="s10" data-points="20">
+          <div class="challenge-main">
+            <div class="challenge-title">Ask 1 direct “are you still open?”</div>
+            <div class="challenge-meta">Follow up with someone who went quiet and simply ask if they’re still open to looking.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+20 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRO TIER: 10 tasks -->
+      <div class="card tier-pro locked">
+        <div class="lock-label">Pro tier · Builder level · Real payout points</div>
+
+        <div class="challenge" data-id="p1" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Batch at least 1 day of content</div>
+            <div class="challenge-meta">Create and schedule 3–5 pieces so you’re not starting from zero tomorrow.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p2" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Host a 10–15 minute live or audio room</div>
+            <div class="challenge-meta">One topic + one story + one call to action. Keep it simple and human.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p3" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Create 1 educational post</div>
+            <div class="challenge-meta">Teach your audience something that makes them feel smarter, calmer, or more in control.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p4" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Follow up with 5 warm leads</div>
+            <div class="challenge-meta">Use clean, confident follow-up — no chasing, no begging, just options.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p5" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Tidy your profile or bio</div>
+            <div class="challenge-meta">Update your picture, bio, or links so they match who you are now.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p6" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Send 2 follow-up videos</div>
+            <div class="challenge-meta">Short loom, screen share, or face-to-camera answering a question or objection.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p7" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Invite 3 people to your main info</div>
+            <div class="challenge-meta">A clean “thought of you” invite to your video, group, or page.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p8" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Share a mini training post</div>
+            <div class="challenge-meta">Carousel, text, or short video that feels like “micro-coaching” for your people.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p9" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Post a personal transformation moment</div>
+            <div class="challenge-meta">Talk about where you were vs where you are now — identity shift, not just money.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="p10" data-points="30">
+          <div class="challenge-main">
+            <div class="challenge-title">Do a 20-minute focused work sprint</div>
+            <div class="challenge-meta">Timer on, distractions off, full focus on the most important needle-mover today.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+30 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ELITE TIER: 10 tasks -->
+      <div class="card tier-elite locked">
+        <div class="lock-label">Elite tier · Leadership & launch · Real payout points</div>
+
+        <div class="challenge" data-id="e1" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Plan or host a 3-day focus sprint</div>
+            <div class="challenge-meta">Outline or run a mini challenge, promo, or push for your audience or team.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e2" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Teach one deeper concept</div>
+            <div class="challenge-meta">Live, audio, or post — go deeper than usual and lead from experience.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e3" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Invite 5 people into your ecosystem</div>
+            <div class="challenge-meta">Group, email list, app, or challenge — bring them closer to your world.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e4" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Share a proof collage or carousel</div>
+            <div class="challenge-meta">Stack your wins — stories, screenshots, testimonials, or life shifts.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e5" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">DM new followers with value</div>
+            <div class="challenge-meta">Welcome them, thank them, and offer something that actually helps.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e6" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Send 3 personalized videos</div>
+            <div class="challenge-meta">Face-to-camera messages for leads, clients, or team members who need support.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e7" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Share your weekly goals with your audience</div>
+            <div class="challenge-meta">Let people see what you’re working toward and invite them to grow with you.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e8" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Create a “why now” post</div>
+            <div class="challenge-meta">Explain why this season matters and why waiting another year will cost them.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e9" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Promote your main funnel or system</div>
+            <div class="challenge-meta">Drive traffic intentionally — not just “hoping people find the link”.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+
+        <div class="challenge" data-id="e10" data-points="40">
+          <div class="challenge-main">
+            <div class="challenge-title">Host or plan a leadership training</div>
+            <div class="challenge-meta">Pour into your buyers, team, or community with a focused training session.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+40 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEKLY / MONTHLY MISSIONS -->
+      <div class="card tier-starter locked weekly-card">
+        <div class="lock-label">Starter weekly mission · grows as you grow</div>
+        <div class="challenge" data-id="sw1" data-points="50">
+          <div class="challenge-main">
+            <div class="challenge-title">Starter Weekly: 5-person info push</div>
+            <div class="challenge-meta">Across the week, invite at least 5 people to your main info and screenshot your reach.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+50 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tier-pro locked weekly-card">
+        <div class="lock-label">Pro weekly mission · visibility & leadership</div>
+        <div class="challenge" data-id="pw1" data-points="100">
+          <div class="challenge-main">
+            <div class="challenge-title">Pro Weekly: Teach + invite</div>
+            <div class="challenge-meta">Host one 10–20 minute live/audio and post a recap or takeaway carousel after.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+100 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tier-elite locked weekly-card">
+        <div class="lock-label">Elite weekly mission · impact & leverage</div>
+        <div class="challenge" data-id="ew1" data-points="150">
+          <div class="challenge-main">
+            <div class="challenge-title">Elite Weekly: Impact sprint</div>
+            <div class="challenge-meta">Combine: one live, 5 clean invites, and one proof post about the week&apos;s work.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+150 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tier-elite growth-hidden" id="growthWeekly">
+        <div class="lock-label">Growth Mode weekly mission · unlocked at 7-day streak</div>
+        <div class="challenge" data-id="gw1" data-points="200">
+          <div class="challenge-main">
+            <div class="challenge-title">Growth Weekly: Asset builder</div>
+            <div class="challenge-meta">Across the week, create 1 lasting asset — a mini guide, master post, or funnel piece.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+200 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tier-elite locked monthly-card">
+        <div class="lock-label">Elite monthly mission · leadership project</div>
+        <div class="challenge" data-id="em1" data-points="400">
+          <div class="challenge-main">
+            <div class="challenge-title">Elite Monthly: 3–7 day promo or event</div>
+            <div class="challenge-meta">Run a themed week, promo, or challenge for your audience, team, or list.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+400 pts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tier-elite growth-hidden" id="growthMonthly">
+        <div class="lock-label">Growth Mode monthly mission · unlocked at 7-day streak</div>
+        <div class="challenge" data-id="gm1" data-points="500">
+          <div class="challenge-main">
+            <div class="challenge-title">Growth Monthly: Build a new system or series</div>
+            <div class="challenge-meta">Design a 7–10 day content series, a simple funnel, or a new onboarding experience.</div>
+          </div>
+          <div class="challenge-side">
+            <div class="challenge-points">+500 pts</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REWARDS -->
+    <section id="screen-rewards" class="screen">
+      <div class="card">
+        <h2>Reward structure (example)</h2>
+        <p class="muted">
+          Free tier = credits only (no cashouts). Starter, Pro, and Elite use real points toward your payout or prize ladder.
+        </p>
+        <p class="tier-title">Free tier · Credit mode</p>
+        <ul class="rules-list">
+          <li>Credits show your consistency and unlock upgrade perks.</li>
+          <li>When you upgrade from Free to any paid tier, you get <strong>5% off your first month</strong>.</li>
+          <li>Upgrading resets your credits to zero so you start clean in paid mode.</li>
+        </ul>
+
+        <p class="tier-title">Paid tiers · example payout ladder</p>
+        <ul class="rules-list">
+          <li>1000 pts → $50 value</li>
+          <li>2000 pts → $75–$100 value</li>
+          <li>4000 pts → $150+ value</li>
+          <li>You can adjust these values to match cash, PayPal, product, gift cards, or prize bundles.</li>
+        </ul>
+      </div>
+
+      <div class="card" id="paidNoticeCard">
+        <h2>Cashouts & proof</h2>
+        <div id="paidNoticeFree">
+          <p class="muted">
+            You are currently in <strong>Free / Credit mode</strong>. You can stack credits and momentum, but
+            <strong>cashouts are only available on Starter, Pro, and Elite tiers.</strong>
+          </p>
+          <a href="https://placeholder.com/starter27" target="_blank" class="btn small">Upgrade to unlock payouts</a>
+        </div>
+        <div id="paidNoticePaid" style="display:none;">
+          <p class="muted">
+            You are in a paid tier. Your host can use your points for cash, PayPal, gift cards, products, or prize bundles.
+            Follow their rules for how and when payouts happen.
+          </p>
+          <a href="https://placeholder.com/weekly-proof" target="_blank" class="btn small">Submit screenshots &amp; proof (host form)</a>
+          <p class="muted" style="margin-top:8px;font-size:0.76rem;">
+            Replace the link above with your Beacons, Google Form, or Airtable form when you go live.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="screen-leaderboard" class="screen">
+      <div class="card">
+        <h2>Sample leaderboard layout</h2>
+        <p class="muted">
+          Use this as a visual example. Run your actual leaderboard inside a spreadsheet, group post, or graphic.
+        </p>
+        <ul class="rules-list">
+          <li>Top Action-Taker · 7-day streak · 230 pts · Elite</li>
+          <li>Runner Up · 5-day streak · 178 pts · Pro</li>
+          <li>Consistent Player · 3-day streak · 94 pts · Starter</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- UPGRADES -->
+    <section id="screen-upgrades" class="screen">
+      <div class="card">
+        <h2>Upgrade from Free · Unlock real rewards</h2>
+        <p class="muted">
+          Free mode is for practice and credits. When you upgrade from Free to Starter, Pro, or Elite,
+          you automatically unlock <strong>5% off your first month</strong> on any tier, your credits reset to zero,
+          and your account switches into real payout points.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Starter · $27/mo</h2>
+        <p class="muted">
+          For the person who is ready to stop dabbling and finally stack consistent action.
+        </p>
+        <p class="muted">
+          You get: Starter challenges, real payout points, a 2× reward ladder, and a seat at the “I’m actually doing this” table.
+        </p>
+        <span class="tag">Unlock Starter tier</span>
+        <span class="tag">2× reward ladder</span>
+        <span class="tag">5% off first month from Free</span>
+        <br/>
+        <a href="https://placeholder.com/starter27" target="_blank" class="btn small">Starter checkout</a>
+        <p class="muted" style="margin-top:6px;font-size:0.76rem;">
+          On your thank-you page, give them this code: <strong>starter27</strong>
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Pro · $47/mo</h2>
+        <p class="muted">
+          For the builders, team leads, and serious side-hustlers who want more than “just posting”.
+        </p>
+        <p class="muted">
+          You get: Starter + Pro challenges, 3× reward ladder, weekly builder missions, and 5% off your first month when upgrading from Free.
+        </p>
+        <span class="tag">Unlock Starter + Pro</span>
+        <span class="tag">3× reward ladder</span>
+        <span class="tag">Builder missions</span>
+        <br/>
+        <a href="https://placeholder.com/pro47" target="_blank" class="btn small">Pro checkout</a>
+        <p class="muted" style="margin-top:6px;font-size:0.76rem;">
+          On your thank-you page, give them this code: <strong>pro47</strong>
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Elite · $97/mo</h2>
+        <p class="muted">
+          For the ones running the comeback story — leaders, launchers, and “I’m not playing small anymore” energy.
+        </p>
+        <p class="muted">
+          You get: All tiers unlocked, 4× reward ladder, weekly and monthly Elite missions, Growth Mode missions at 7-day streak,
+          and 5% off your first month when upgrading from Free.
+        </p>
+        <span class="tag">Unlock everything</span>
+        <span class="tag">4× reward ladder</span>
+        <span class="tag">Elite & growth missions</span>
+        <br/>
+        <a href="https://placeholder.com/elite97" target="_blank" class="btn small">Elite checkout</a>
+        <p class="muted" style="margin-top:6px;font-size:0.76rem;">
+          On your thank-you page, give them this code: <strong>elite97</strong>
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Enter your unlock code</h2>
+        <p class="muted">
+          After someone subscribes, they enter the code from your thank-you page here on their own device.
+        </p>
+        <input id="unlockCode" class="field-input" placeholder="starter27, pro47, elite97 (example codes)" />
+        <button class="btn small secondary" id="applyCodeBtn">Apply code</button>
+        <p class="muted" style="margin-top:6px;font-size:0.76rem;">
+          If they upgraded from Free, their credits and old streak are reset so they can start fresh in paid mode.
+        </p>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="screen-profile" class="screen">
+      <div class="card">
+        <h2>Your details</h2>
+        <p class="muted">
+          Your host may ask for your name, email, and payout preference when you submit screenshots for rewards.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="field-label">Name</div>
+        <input id="profileName" class="field-input" placeholder="Your full name" />
+        <div class="field-label">Email</div>
+        <input id="profileEmail" class="field-input" type="email" placeholder="you@example.com" />
+        <div class="field-label">Preferred payout method</div>
+        <input id="profilePayout" class="field-input" placeholder="PayPal, e-transfer, gift card, product credit, etc." />
+        <button class="btn small" id="saveProfileBtn">Save profile on this device</button>
+        <p class="muted" style="margin-top:6px;font-size:0.76rem;">
+          This does not send anything to your host automatically. It just pre-fills forms and screenshots.
+        </p>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="screen-rules" class="screen">
+      <div class="card">
+        <h2>Daily rules</h2>
+        <ul class="rules-list">
+          <li>Free tier = <strong>credits only</strong>. No cashouts. Use it to practice and build consistency.</li>
+          <li>Starter, Pro, and Elite tiers earn real payout points based on your host&apos;s reward structure.</li>
+          <li>Each task can be checked once per calendar day on that device. Double-tapping doesn&apos;t give extra.</li>
+          <li>The reset button refreshes the checklist visuals but does not re-open tasks for extra points that day.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Streaks & Growth Mode</h2>
+        <ul class="rules-list">
+          <li>Each day you complete at least one task, your streak grows by one.</li>
+          <li>If you skip a day with no completed tasks, your streak resets.</li>
+          <li>At a 7-day streak in a paid tier, you unlock Growth Mode weekly + monthly missions.</li>
+          <li>Growth Mode missions are bigger projects and carry higher point values.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Proof & honesty policy</h2>
+        <ul class="rules-list">
+          <li>Only tap tasks you actually completed. If you didn&apos;t do it, don&apos;t mark it done.</li>
+          <li>Hosts may require screenshots of your dashboard and some of your posts or DMs as proof.</li>
+          <li>Random audits are allowed — if screenshots don&apos;t match your claims, rewards can be reduced or denied.</li>
+          <li>This hub does not guarantee income. It helps you track the work that can lead to income in any company or offer.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Generic use for any company</h2>
+        <p class="muted">
+          This system is intentionally generic. It does not belong to, promote, or compete with any specific company.
+        </p>
+        <ul class="rules-list">
+          <li>Perfect for: affiliate marketers, digital marketers, coaches, UGC creators, MLM/NWM/party plan reps, DS, and product sellers.</li>
+          <li>Use it to gamify your own promos, team pushes, customer challenges, or community events.</li>
+          <li>All branding, rewards, and challenge rules are controlled by the host, not the app.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-target="dashboard"><span>🏠</span>Home</div>
+    <div class="nav-item" data-target="challenges"><span>✅</span>Tasks</div>
+    <div class="nav-item" data-target="rewards"><span>🎁</span>Rewards</div>
+    <div class="nav-item" data-target="leaderboard"><span>📊</span>Leaders</div>
+    <div class="nav-item" data-target="upgrades"><span>⚡️</span>Upgrades</div>
+    <div class="nav-item" data-target="profile"><span>🙋‍♀️</span>Profile</div>
+    <div class="nav-item" data-target="rules"><span>📜</span>Rules</div>
+  </nav>
+
+  <script>
+    // --- State ---
+    const todayKey = new Date().toISOString().slice(0,10);
+    let tier = localStorage.getItem('rewardTier_v7') || 'free'; // free, starter, pro, elite
+    let state = {
+      done: {}, // id -> {d: date, m: "free"|"paid"}
+      lifetimePoints: 0,
+      lifetimeCredits: 0,
+      streak: 0,
+      lastActionDate: null
+    };
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem('rewardState_v7');
+        if(raw){
+          const data = JSON.parse(raw);
+          state.done = data.done || {};
+          state.lifetimePoints = data.lifetimePoints || 0;
+          state.lifetimeCredits = data.lifetimeCredits || 0;
+          state.streak = data.streak || 0;
+          state.lastActionDate = data.lastActionDate || null;
+        }
+      }catch(e){console.log(e);}
+      try{
+        const profRaw = localStorage.getItem('rewardProfile_v7');
+        if(profRaw){
+          const p = JSON.parse(profRaw);
+          document.getElementById('profileName').value = p.name || '';
+          document.getElementById('profileEmail').value = p.email || '';
+          document.getElementById('profilePayout').value = p.payout || '';
+        }
+      }catch(e){console.log(e);}
+    }
+
+    function saveState(){
+      try{
+        localStorage.setItem('rewardState_v7',JSON.stringify(state));
+      }catch(e){console.log(e);}
+    }
+
+    function saveProfile(){
+      const p = {
+        name:document.getElementById('profileName').value.trim(),
+        email:document.getElementById('profileEmail').value.trim(),
+        payout:document.getElementById('profilePayout').value.trim()
+      };
+      localStorage.setItem('rewardProfile_v7',JSON.stringify(p));
+      alert('Profile saved on this device.');
+    }
+
+    function tierRank(t){
+      if(t==='starter') return 1;
+      if(t==='pro') return 2;
+      if(t==='elite') return 3;
+      return 0;
+    }
+
+    function applyTierLocks(){
+      const r = tierRank(tier);
+      document.querySelectorAll('.tier-starter').forEach(c=>{
+        c.classList.toggle('locked', r < 1);
+      });
+      document.querySelectorAll('.tier-pro').forEach(c=>{
+        c.classList.toggle('locked', r < 2);
+      });
+      document.querySelectorAll('.tier-elite').forEach(c=>{
+        c.classList.toggle('locked', r < 3);
+      });
+
+      const pretty = tier.charAt(0).toUpperCase()+tier.slice(1);
+      document.getElementById('tierPill').textContent = pretty + ' tier';
+
+      const modeInfo = document.getElementById('modeInfo');
+      const paidNoticeFree = document.getElementById('paidNoticeFree');
+      const paidNoticePaid = document.getElementById('paidNoticePaid');
+
+      if(tier === 'free'){
+        modeInfo.textContent = "Free mode · You’re earning credits only. Upgrade to unlock real payout points.";
+        paidNoticeFree.style.display = 'block';
+        paidNoticePaid.style.display = 'none';
+      }else{
+        modeInfo.textContent = "Paid mode · You’re earning real payout points. Follow your host’s rules for cashouts.";
+        paidNoticeFree.style.display = 'none';
+        paidNoticePaid.style.display = 'block';
+      }
+
+      // growth cards only visible if elite and streak >= 7
+      const showGrowth = (tier === 'elite' && state.streak >= 7);
+      document.getElementById('growthWeekly').classList.toggle('growth-hidden', !showGrowth);
+      document.getElementById('growthMonthly').classList.toggle('growth-hidden', !showGrowth);
+    }
+
+    function recalcPoints(){
+      let todayPoints = 0;
+      let todayCredits = 0;
+      document.querySelectorAll('.challenge').forEach(ch=>{
+        const id = ch.dataset.id;
+        const rec = state.done[id];
+        const pts = parseInt(ch.dataset.points || '0',10) || 0;
+        if(rec && rec.d === todayKey){
+          ch.classList.add('done');
+          if(rec.m === 'free'){
+            todayCredits += pts;
+          }else{
+            todayPoints += pts;
+          }
+        }else{
+          ch.classList.remove('done');
+        }
+      });
+
+      if(tier === 'free'){
+        document.getElementById('pointsToday').textContent = todayCredits;
+        document.getElementById('subPointsLine').textContent =
+          "Today: " + todayCredits + " credits · Lifetime: " + state.lifetimeCredits + " credits";
+      }else{
+        document.getElementById('pointsToday').textContent = todayPoints;
+        document.getElementById('subPointsLine').textContent =
+          "Today: " + todayPoints + " pts · Lifetime: " + state.lifetimePoints + " pts";
+      }
+      document.getElementById('streakLine').textContent = "Streak: " + state.streak + " days";
+
+      // update growth visibility
+      applyTierLocks();
+    }
+
+    function registerActionDay(){
+      // update streak when a new day gets its first completion
+      if(state.lastActionDate === todayKey){
+        return;
+      }
+      const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+      if(state.lastActionDate === yesterday){
+        state.streak = (state.streak || 0) + 1;
+      }else{
+        state.streak = 1;
+      }
+      state.lastActionDate = todayKey;
+    }
+
+    function initChallenges(){
+      document.querySelectorAll('.challenge').forEach(ch=>{
+        ch.addEventListener('click', ()=>{
+          if(ch.closest('.locked')) return;
+          const id = ch.dataset.id;
+          if(!id) return;
+          const rec = state.done[id];
+          if(rec && rec.d === todayKey){
+            return; // already done today
+          }
+          const pts = parseInt(ch.dataset.points || '0',10) || 0;
+          const mode = (tier === 'free') ? 'free' : 'paid';
+          state.done[id] = {d: todayKey, m: mode};
+          if(mode === 'free'){
+            state.lifetimeCredits += pts;
+          }else{
+            state.lifetimePoints += pts;
+          }
+          registerActionDay();
+          saveState();
+          recalcPoints();
+        });
+      });
+    }
+
+    function resetVisualForToday(){
+      alert('Checklist refreshed for a new day. Tasks already completed today stay locked to your points/credits for that date.');
+      recalcPoints();
+    }
+
+    function applyUnlockCode(){
+      const code = (document.getElementById('unlockCode').value || '').trim().toLowerCase();
+      if(code !== 'starter27' && code !== 'pro47' && code !== 'elite97'){
+        alert('Invalid code. Double-check the code from your checkout thank-you page.');
+        return;
+      }
+      const prevTier = tier;
+      if(code === 'starter27'){ tier = 'starter'; }
+      if(code === 'pro47'){ tier = 'pro'; }
+      if(code === 'elite97'){ tier = 'elite'; }
+
+      // If upgrading from free into paid: reset credits, points, streak, and daily completions
+      if(prevTier === 'free' && tier !== 'free'){
+        state = {
+          done: {},
+          lifetimePoints: 0,
+          lifetimeCredits: 0,
+          streak: 0,
+          lastActionDate: null
+        };
+        alert('Upgrade successful! You unlocked 5% off your first month on this tier. Your credits and streak have been reset so you can start fresh in paid mode.');
+      }else{
+        alert('Tier updated on this device.');
+      }
+
+      localStorage.setItem('rewardTier_v7', tier);
+      saveState();
+      applyTierLocks();
+      recalcPoints();
+    }
+
+    function initNav(){
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(item=>{
+        item.addEventListener('click', ()=>{
+          const target = item.dataset.target;
+          document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+          document.getElementById('screen-'+target).classList.add('active');
+
+          document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+    }
+
+    // init
+    loadState();
+    document.addEventListener('DOMContentLoaded', ()=>{
+      initNav();
+      initChallenges();
+      applyTierLocks();
+      recalcPoints();
+      document.getElementById('resetBtn').addEventListener('click', resetVisualForToday);
+      document.getElementById('applyCodeBtn').addEventListener('click', applyUnlockCode);
+      document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+    });
+
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', ()=>{
+        navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+      });
+    }
+  </script>
+</body>
+</html>
