@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reward Hub · MWA LegacyBuilt Tech</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#6b3df5" />
+  <style>
+    :root {
+      --purple:#6b3df5;
+      --gold:#f5c453;
+      --bg:#05040b;
+      --text:#f9f5ff;
+      --muted:#a6a1c4;
+      --radius:18px;
+      --shadow:0 16px 34px rgba(0,0,0,0.65);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#25194b 0,#05040b 55%,#020107 100%);
+      color:var(--text);
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      padding:14px 16px 10px;
+      background:linear-gradient(135deg,#6b3df5,#f5c453);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 14px 30px rgba(0,0,0,0.7);
+    }
+    .logo{
+      width:32px;height:32px;
+      border-radius:999px;
+      background:radial-gradient(circle at 30% 20%,#f5c453,#6b3df5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.1rem;
+      font-weight:800;
+      color:#1b102e;
+    }
+    header h1{
+      margin:0;
+      font-size:1.15rem;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+    }
+    header p{
+      margin:2px 0 0;
+      font-size:0.78rem;
+      opacity:0.92;
+    }
+    main{
+      padding:18px 14px 90px;
+      max-width:860px;
+      margin:0 auto;
+    }
+    .screen{display:none;}
+    .screen.active{display:block;}
+    .card{
+      background:linear-gradient(145deg,rgba(255,255,255,0.02),rgba(14,12,30,0.98));
+      border-radius:var(--radius);
+      padding:16px 16px 14px;
+      margin-bottom:16px;
+      border:1px solid rgba(245,196,83,0.16);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0 0 6px;
+      font-size:1rem;
+    }
+    .muted{color:var(--muted);font-size:0.8rem;}
+    .pill{
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:0.7rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      background:rgba(0,0,0,0.5);
+      color:#f5e8b6;
+    }
+    .points-main{
+      font-size:2.1rem;
+      font-weight:780;
+      color:var(--gold);
+      margin:4px 0 0;
+    }
+    .sub-points{
+      font-size:0.78rem;
+      color:var(--muted);
+      margin-top:4px;
+    }
+    .btn{
+      display:inline-block;
+      border:none;
+      border-radius:12px;
+      padding:9px 13px;
+      font-size:0.86rem;
+      font-weight:650;
+      cursor:pointer;
+      margin-top:8px;
+      background:var(--purple);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(107,61,245,0.6);
+      text-decoration:none;
+    }
+    .btn.secondary{
+      background:transparent;
+      color:var(--gold);
+      border:1px solid rgba(245,196,83,0.5);
+      box-shadow:none;
+    }
+    .btn.small{
+      padding:7px 11px;
+      font-size:0.78rem;
+      box-shadow:none;
+    }
+    .tier-price{
+      font-size:1.1rem;
+      font-weight:700;
+      color:var(--gold);
+      margin:4px 0;
+    }
+    .challenge{
+      background:rgba(9,7,22,0.92);
+      border-radius:12px;
+      padding:9px 10px;
+      margin-bottom:9px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      position:relative;
+    }
+    .challenge-main{flex:1;}
+    .challenge-title{font-size:0.9rem;font-weight:600;}
+    .challenge-meta{font-size:0.78rem;color:var(--muted);margin-top:2px;}
+    .challenge-side{text-align:right;font-size:0.78rem;}
+    .challenge-points{color:var(--gold);font-weight:700;}
+    .challenge.done .challenge-title{text-decoration:line-through;opacity:0.7;}
+    .lock-label{
+      font-size:0.7rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:#f3d99a;
+      margin-bottom:6px;
+    }
+    .locked{opacity:0.32;pointer-events:none;}
+    .locked::after{
+      content:"Locked · Upgrade to access";
+      position:absolute;
+      inset:auto 0 0 0;
+      font-size:0.68rem;
+      padding:5px 9px;
+      background:linear-gradient(90deg,rgba(0,0,0,0.9),transparent);
+      color:#f5e2ad;
+    }
+    .rules-list{
+      font-size:0.78rem;
+      color:var(--muted);
+      padding-left:18px;
+      margin:6px 0;
+    }
+    .rules-list li{margin-bottom:4px;}
+    .tier-title{font-weight:700;}
+    footer.app-foot{
+      text-align:center;
+      font-size:0.68rem;
+      color:var(--muted);
+      margin-top:6px;
+    }
+    footer.app-foot span{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      font-weight:600;
+    }
+    .bottom-nav{
+      position:fixed;
+      left:0;right:0;bottom:0;
+      display:flex;
+      background:rgba(5,4,15,0.98);
+      border-top:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(20px);
+      z-index:20;
+      overflow-x:auto;
+    }
+    .nav-item{
+      flex:1;
+      text-align:center;
+      padding:6px 4px 4px;
+      font-size:0.7rem;
+      color:var(--muted);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .nav-item span{
+      display:block;
+      font-size:1.1rem;
+      margin-bottom:1px;
+    }
+    .nav-item.active{color:var(--gold);font-weight:600;}
+    .field-label{font-size:0.78rem;font-weight:600;margin-bottom:3px;}
+    .field-input{
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.16);
+      background:rgba(0,0,0,0.45);
+      color:var(--text);
+      font-size:0.84rem;
+      margin-bottom:7px;
+    }
+    .field-input:focus{
+      outline:none;
+      border-color:var(--gold);
+      box-shadow:0 0 0 1px rgba(245,196,83,0.5);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">👑</div>
+    <div>
+      <h1>Reward Hub</h1>
+      <p>Purple crown challenge system for any marketer · Built by MWA LegacyBuilt Tech.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="screen-dashboard" class="screen active">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+          <div>
+            <h2>Today&apos;s momentum</h2>
+            <div class="muted" id="modeInfo">
+              Free mode · You&apos;re earning credits only. Upgrade to unlock real payout points.
+            </div>
+          </div>
+          <span class="pill" id="tierPill">Free tier</span>
+        </div>
+        <div class="points-main" id="pointsToday">0</div>
+        <div class="sub-points" id="subPointsLine">Today: 0 credits · Lifetime: 0 credits</div>
+        <div class="sub-points" id="streakLine">Streak: 0 days</div>
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="btn small" onclick="switchScreen('challenges-daily')">Open daily challenges</button>
+          <button class="btn small secondary" id="resetBtn">New day · refresh checklist</button>
+        </div>
+        <p class="muted" style="margin-top:8px;font-size:0.76rem;">
+          The reset button refreshes the visual checklist. It does not let anyone re-earn the same task twice in one day.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>How this works</h2>
+        <ul class="rules-list">
+          <li>Free tier = <strong>credits only</strong>. No cashouts. Use it to build habits and momentum.</li>
+          <li>Starter, Pro, and Elite tiers earn real payout points based on your host&apos;s reward structure.</li>
+          <li>Daily tasks = once per day · Weekly missions = once per current week · Monthly missions = once per current month.</li>
+          <li>Use the Rewards tab to see the payout ladder and request a payout when you qualify.</li>
+        </ul>
+      </div>
+
+      <footer class="app-foot">
+        Powered by <span>MWA LegacyBuilt Tech</span> · Wi-Fi, willpower, and work that actually pays.
+      </footer>
+    </section>
+
+    <!-- DAILY CHALLENGES -->
+    <section id="screen-challenges-daily" class="screen">
+      <div class="card">
+        <h2>Daily challenge board</h2>
+        <p class="muted">
+          Generic, income-producing actions that work for digital, affiliate, MLM/NWM, party plan, UGC, or coaching models.
+        </p>
+      </div>
+
+      <!-- FREE TIER -->
+      <div class="card">
+        <div class="lock-label">Free tier · Included for everyone · Credits only, no cashouts</div>
+        <div id="freeDaily"></div>
+      </div>
+
+      <!-- STARTER TIER -->
+      <div class="card tier-starter locked">
+        <div class="lock-label">Starter tier · Subscription required · Real payout points</div>
+        <div id="starterDaily"></div>
+      </div>
+
+      <!-- PRO TIER -->
+      <div class="card tier-pro locked">
+        <div class="lock-label">Pro tier · Builder level · Real payout points</div>
+        <div id="proDaily"></div>
+      </div>
+
+      <!-- ELITE TIER -->
+      <div class="card tier-elite locked">
+        <div class="lock-label">Elite tier · Leadership & launch · Real payout points</div>
+        <div id="eliteDaily"></div>
+      </div>
+    </section>
+
+    <!-- WEEKLY CHALLENGES -->
+    <section id="screen-weekly" class="screen">
+      <div class="card">
+        <h2>Weekly missions</h2>
+        <p class="muted">
+          Bigger moves you complete once each week to stack momentum. Weekly missions reset with each new week and are auto-generated for paid tiers.
+        </p>
+      </div>
+
+      <!-- FREE VIEW (locked) -->
+      <div class="card locked">
+        <div class="lock-label">Free tier view only</div>
+        <p class="muted">
+          Starter, Pro, and Elite members unlock real weekly missions with payout points. Upgrade to start earning on your weekly momentum.
+        </p>
+      </div>
+
+      <!-- STARTER WEEKLY -->
+      <div class="card tier-starter locked">
+        <div class="lock-label">Starter weekly missions · 100 pts each</div>
+        <div id="starterWeekly"></div>
+      </div>
+
+      <!-- PRO WEEKLY -->
+      <div class="card tier-pro locked">
+        <div class="lock-label">Pro weekly missions · 150 pts each</div>
+        <div id="proWeekly"></div>
+      </div>
+
+      <!-- ELITE WEEKLY -->
+      <div class="card tier-elite locked">
+        <div class="lock-label">Elite weekly missions · 200 pts each</div>
+        <div id="eliteWeekly"></div>
+      </div>
+    </section>
+
+    <!-- MONTHLY CHALLENGES -->
+    <section id="screen-monthly" class="screen">
+      <div class="card">
+        <h2>Monthly growth missions</h2>
+        <p class="muted">
+          Higher-level missions you complete once each month. These auto-rotate as you grow, based on your tier.
+        </p>
+      </div>
+
+      <!-- FREE VIEW (locked) -->
+      <div class="card locked">
+        <div class="lock-label">Free tier view only</div>
+        <p class="muted">
+          Monthly missions are reserved for paid tiers and carry bigger point rewards. Upgrade to Starter, Pro, or Elite to unlock them.
+        </p>
+      </div>
+
+      <!-- STARTER MONTHLY -->
+      <div class="card tier-starter locked">
+        <div class="lock-label">Starter monthly missions · 500 pts each</div>
+        <div id="starterMonthly"></div>
+      </div>
+
+      <!-- PRO MONTHLY -->
+      <div class="card tier-pro locked">
+        <div class="lock-label">Pro monthly missions · 800 pts each</div>
+        <div id="proMonthly"></div>
+      </div>
+
+      <!-- ELITE MONTHLY -->
+      <div class="card tier-elite locked">
+        <div class="lock-label">Elite monthly missions · 1,200 pts each</div>
+        <div id="eliteMonthly"></div>
+      </div>
+    </section>
+
+    <!-- REWARDS -->
+    <section id="screen-rewards" class="screen">
+      <div class="card">
+        <h2>Reward structure</h2>
+        <p class="muted">
+          Free tier = credits only (no cashouts). Starter, Pro, and Elite use real points toward your payout or prize ladder.
+        </p>
+        <p class="tier-title">Free tier · Credit mode</p>
+        <ul class="rules-list">
+          <li>Credits show your consistency and unlock upgrade perks.</li>
+          <li>When you upgrade from Free to any paid tier, you can offer a discount on the first month.</li>
+          <li>Upgrading resets your credits to zero so you start clean in paid mode.</li>
+        </ul>
+
+        <p class="tier-title">Paid tiers · premium payout ladder</p>
+        <ul class="rules-list">
+          <li><strong>Starter:</strong> 10,000 pts → $50 · 20,000 pts → $100 · 40,000 pts → $200</li>
+          <li><strong>Pro:</strong> 15,000 pts → $75 · 30,000 pts → $150 · 60,000 pts → $300</li>
+          <li><strong>Elite:</strong> 20,000 pts → $150 · 40,000 pts → $300 · 80,000 pts → $600+</li>
+          <li>Points come from a mix of daily, weekly, and monthly missions across your tier.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Request a payout</h2>
+        <p class="muted">
+          When you hit a payout tier, make sure your profile details are correct, then tap the button below to open the official payout form.
+        </p>
+        <button class="btn" onclick="openPayoutForm()">Submit payout request</button>
+        <p class="muted" style="margin-top:8px;">
+          The form opens in your browser with your name, email, and payout preference pre-filled where supported by your host.
+        </p>
+      </div>
+    </section>
+
+    <!-- UPGRADES (subscription tiers display) -->
+    <section id="screen-upgrades" class="screen">
+      <div class="card">
+        <h2>Choose your tier</h2>
+        <p class="muted">
+          Pick the level that matches your season. Your host will connect these tiers to real subscription links
+          (Square, Beacons, Stripe, Stan, etc.) so you can unlock Starter, Pro, or Elite access.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Free · Credit Mode</h2>
+        <div class="tier-price">$0 / month</div>
+        <ul class="rules-list">
+          <li>10 simple daily tasks that build consistency.</li>
+          <li>Earn <strong>credits only</strong> (no cashouts).</li>
+          <li>Perfect for testing the system and building habits.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Starter · Foundation Tier</h2>
+        <div class="tier-price">$27 / month</div>
+        <ul class="rules-list">
+          <li>Unlocks Starter daily tasks (20 pts each).</li>
+          <li>Starter weekly missions (auto-generated, 100 pts each).</li>
+          <li>Starter monthly missions (auto-generated, 500 pts each).</li>
+          <li>Example ladder: 10,000 → $50 · 20,000 → $100 · 40,000 → $200.</li>
+        </ul>
+        <a class="btn" href="https://your-starter-checkout-link.com" target="_blank" rel="noopener">Subscribe to Starter</a>
+      </div>
+
+      <div class="card">
+        <h2>Pro · Builder Tier</h2>
+        <div class="tier-price">$47 / month</div>
+        <ul class="rules-list">
+          <li>Unlocks Pro daily tasks (30 pts each).</li>
+          <li>Pro weekly missions (auto-generated, 150 pts each).</li>
+          <li>Pro monthly missions (auto-generated, 800 pts each).</li>
+          <li>Example ladder: 15,000 → $75 · 30,000 → $150 · 60,000 → $300.</li>
+        </ul>
+        <a class="btn" href="https://your-pro-checkout-link.com" target="_blank" rel="noopener">Subscribe to Pro</a>
+      </div>
+
+      <div class="card">
+        <h2>Elite · Leadership Tier</h2>
+        <div class="tier-price">$97 / month</div>
+        <ul class="rules-list">
+          <li>Unlocks Elite daily tasks (40 pts each).</li>
+          <li>Elite weekly missions (auto-generated, 200 pts each).</li>
+          <li>Elite monthly missions (auto-generated, 1,200 pts each).</li>
+          <li>Example ladder: 20,000 → $150 · 40,000 → $300 · 80,000 → $600+.</li>
+        </ul>
+        <a class="btn" href="https://your-elite-checkout-link.com" target="_blank" rel="noopener">Subscribe to Elite</a>
+      </div>
+
+      <div class="card">
+        <h2>Host note</h2>
+        <p class="muted">
+          Replace the three checkout links above with your real subscription URLs. When someone subscribes, you
+          upgrade their tier on the back end (or give them access to a Starter/Pro/Elite version of this app).
+        </p>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="screen-profile" class="screen">
+      <div class="card">
+        <h2>Your payout details</h2>
+        <p class="muted">
+          These details stay on this device and are used to pre-fill the payout form when you request a reward.
+        </p>
+        <label class="field-label" for="userName">Name</label>
+        <input id="userName" class="field-input" type="text" placeholder="Your full name" />
+
+        <label class="field-label" for="userEmail">Email</label>
+        <input id="userEmail" class="field-input" type="email" placeholder="Your best email" />
+
+        <label class="field-label" for="userPayout">Payout preference</label>
+        <input id="userPayout" class="field-input" type="text" placeholder="e.g. PayPal, e-transfer, gift card" />
+
+        <button class="btn small" id="saveProfileBtn">Save details</button>
+        <p class="muted" style="margin-top:6px;font-size:0.76rem;">
+          Tip: Use the same email and payout method your host requires so they can verify and send rewards quickly.
+        </p>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="screen-rules" class="screen">
+      <div class="card">
+        <h2>Daily, weekly, monthly rules</h2>
+        <ul class="rules-list">
+          <li>Free tier = <strong>credits only</strong>. No cashouts. Use it to practice and build consistency.</li>
+          <li>Starter, Pro, and Elite tiers earn real payout points based on your host&apos;s reward structure.</li>
+          <li>Daily tasks: once per calendar day · Weekly missions: once per current week · Monthly missions: once per current month.</li>
+          <li>The reset button only refreshes the checklist visuals for today. It does not unlock extra points for the same day.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Payout ladder overview</h2>
+        <ul class="rules-list">
+          <li>Starter tier: 10,000 pts → $50 · 20,000 pts → $100 · 40,000 pts → $200.</li>
+          <li>Pro tier: 15,000 pts → $75 · 30,000 pts → $150 · 60,000 pts → $300.</li>
+          <li>Elite tier: 20,000 pts → $150 · 40,000 pts → $300 · 80,000 pts → $600+.</li>
+          <li>Your host can adjust these numbers, but the structure stays: bigger consistency, bigger rewards.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-target="dashboard"><span>🏠</span>Home</div>
+    <div class="nav-item" data-target="challenges-daily"><span>✅</span>Daily</div>
+    <div class="nav-item" data-target="weekly"><span>📆</span>Weekly</div>
+    <div class="nav-item" data-target="monthly"><span>📈</span>Monthly</div>
+    <div class="nav-item" data-target="rewards"><span>🎁</span>Rewards</div>
+    <div class="nav-item" data-target="upgrades"><span>⚡️</span>Upgrades</div>
+    <div class="nav-item" data-target="profile"><span>🙋‍♀️</span>Profile</div>
+    <div class="nav-item" data-target="rules"><span>📜</span>Rules</div>
+  </nav>
+
+  <script>
+    const now = new Date();
+    const todayKey = now.toISOString().slice(0,10);
+
+    function getWeekKey(d){
+      const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = date.getUTCDay() || 7;
+      date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+      const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1)/7);
+      return date.getUTCFullYear() + "-W" + weekNo;
+    }
+
+    const weekKey = getWeekKey(now);
+    const monthKey = todayKey.slice(0,7); // YYYY-MM
+
+    const PAYOUT_FORM_URL = "https://your-payout-form-link-here.com"; // replace with your Beacons/Square/Google Form
+
+    let tier = localStorage.getItem('rewardTier_v9') || 'free';
+    let state = {
+      done:{},
+      lifetimePoints:0,
+      lifetimeCredits:0,
+      streak:0,
+      lastActionDate:null
+    };
+
+    const dailyPools = {
+      free: [
+        { id:"fD1", points:10, title:"Post 1 value-based piece of content", meta:"Teach something that helps your audience today." },
+        { id:"fD2", points:10, title:"Have 3 real conversations", meta:"Three genuine DMs or comment threads — not copy/paste scripts." },
+        { id:"fD3", points:10, title:"Engage on 10 posts", meta:"Thoughtful comments on ideal client or customer content." },
+        { id:"fD4", points:10, title:"Post 1 story or behind-the-scenes", meta:"Show the human behind your business today." },
+        { id:"fD5", points:10, title:"Comment inside one niche group", meta:"Add value in a group your ideal humans already use." },
+        { id:"fD6", points:10, title:"Reply to an old conversation", meta:"Re-open one DM or thread from the past 30 days." },
+        { id:"fD7", points:10, title:"Share a micro proof moment", meta:"Screenshot or story that shows a small win or shift." },
+        { id:"fD8", points:10, title:"Tidy one piece of content", meta:"Update a caption, headline, or CTA on an old post." },
+        { id:"fD9", points:10, title:"Add 3 new aligned people", meta:"Grow your audience with humans who fit your world." },
+        { id:"fD10", points:10, title:"Share 1 soft CTA in stories", meta:"Invite people to message you, vote, or ask for more info." }
+      ],
+      starter: [
+        { id:"sD1", points:20, title:"Invite 2 people to your main info", meta:"Send your overview, video, or page to two qualified humans." },
+        { id:"sD2", points:20, title:"Post with a clear CTA", meta:"Ask people to comment, message, or tap your link intentionally." },
+        { id:"sD3", points:20, title:"Share a win or story post", meta:"Life, income, mindset, confidence, or time freedom story." },
+        { id:"sD4", points:20, title:"Follow up with 2 warm leads", meta:"Circle back without chasing — just honest check-ins." },
+        { id:"sD5", points:20, title:"Check your insights", meta:"Screenshot your reach/views so you can track momentum." },
+        { id:"sD6", points:20, title:"Post with your face in it", meta:"People buy from humans they know, like, and trust." },
+        { id:"sD7", points:20, title:"Send 3 warm voice notes", meta:"Three real check-ins or follow-ups using your actual voice." },
+        { id:"sD8", points:20, title:"Share a “life looks different now” moment", meta:"Talk about what’s changed — time, choices, energy, or money." },
+        { id:"sD9", points:20, title:"Add 5 new aligned people", meta:"Keep growing your audience with the right kind of humans." },
+        { id:"sD10", points:20, title:"Ask 1 direct “are you still open?”", meta:"Follow up with someone who went quiet and ask where they’re at." }
+      ],
+      pro: [
+        { id:"pD1", points:30, title:"Batch 1 day of content", meta:"Create/schedule at least 3 pieces for tomorrow or later." },
+        { id:"pD2", points:30, title:"Host a 10–15 minute live or audio room", meta:"One topic · one story · one CTA. Simple and human." },
+        { id:"pD3", points:30, title:"Create 1 educational post", meta:"Teach something that makes your audience feel in control." },
+        { id:"pD4", points:30, title:"Follow up with 5 warm leads", meta:"No chasing — just checking in and offering options." },
+        { id:"pD5", points:30, title:"Tidy your profile or bio", meta:"Update your picture, bio, or links so they match your current brand." },
+        { id:"pD6", points:30, title:"Send 2 follow-up videos", meta:"Short video replies to questions or objections from real humans." },
+        { id:"pD7", points:30, title:"Invite 3 people to your main funnel", meta:"Group, video, page, or system that explains what you do clearly." },
+        { id:"pD8", points:30, title:"Share a mini training post", meta:"Carousel, text, or video that feels like micro-coaching." },
+        { id:"pD9", points:30, title:"Post a personal transformation moment", meta:"Where you were vs where you are now — identity, not just money." },
+        { id:"pD10", points:30, title:"Do a 20-minute focused work sprint", meta:"Timer on, distractions off, needle-mover only." }
+      ],
+      elite: [
+        { id:"eD1", points:40, title:"Plan or host a 3-day focus sprint", meta:"Mini challenge, promo, or push for your world or team." },
+        { id:"eD2", points:40, title:"Teach one deeper concept", meta:"Live, audio, or post — lead from experience and depth." },
+        { id:"eD3", points:40, title:"Invite 5 people into your ecosystem", meta:"Group, email list, challenge, or app — pull them closer." },
+        { id:"eD4", points:40, title:"Share a proof collage or carousel", meta:"Stack stories, screenshots, and proof moments together." },
+        { id:"eD5", points:40, title:"DM new followers with value", meta:"Welcome them and give something useful without pitching." },
+        { id:"eD6", points:40, title:"Send 3 personalized videos", meta:"Face-to-camera check-ins for buyers, team, or close leads." },
+        { id:"eD7", points:40, title:"Share your weekly goals publicly", meta:"Let your audience see your focus and invite them to grow with you." },
+        { id:"eD8", points:40, title:"Create a “why now” post", meta:"Explain the cost of waiting another 6–12 months to start." },
+        { id:"eD9", points:40, title:"Promote your main funnel or system", meta:"Intentionally drive traffic, not just hope they find the link." },
+        { id:"eD10", points:40, title:"Host or plan a leadership training", meta:"Pour into buyers, team, or community with focused training." }
+      ]
+    };
+
+    const weeklyPools = {
+      starter: [
+        { id:"sW1", points:100, title:"Host or schedule 1 weekly live", meta:"Go live or run an audio room with one main topic and CTA." },
+        { id:"sW2", points:100, title:"Start 10 new meaningful conversations", meta:"Reach out to 10 aligned humans with genuine connection." },
+        { id:"sW3", points:100, title:"Review your main funnel", meta:"Click through your link, page, or video and update one thing." },
+        { id:"sW4", points:100, title:"Collect 3 proof moments", meta:"Screenshots, messages, or photos that show real wins." },
+        { id:"sW5", points:100, title:"Show up live in your stories 3 days", meta:"Talk to camera at least once on 3 separate days this week." }
+      ],
+      pro: [
+        { id:"pW1", points:150, title:"Run a 2–3 day focus push", meta:"Theme, goal, and simple daily actions for your world or team." },
+        { id:"pW2", points:150, title:"Invite 20 people into your ecosystem", meta:"Group, email list, challenge, or app — intentional invitations." },
+        { id:"pW3", points:150, title:"Create 3 long-form value pieces", meta:"Posts, lives, or videos that teach at a deeper level." },
+        { id:"pW4", points:150, title:"Audit your content from the last 30 days", meta:"Note what performed best and what to repeat." },
+        { id:"pW5", points:150, title:"Host a Q&A or office hours", meta:"Be available for questions for 20–30 minutes." }
+      ],
+      elite: [
+        { id:"eW1", points:200, title:"Host a leadership or strategy session", meta:"Pour into buyers, team, or community with focused training." },
+        { id:"eW2", points:200, title:"Map & promote your weekly visibility plan", meta:"Plan lives, posts, collabs, and promos for the coming week." },
+        { id:"eW3", points:200, title:"Connect with 5 key leaders or partners", meta:"Voice/video or DM — relationship-building that moves the needle." },
+        { id:"eW4", points:200, title:"Run a team or community challenge", meta:"Create a 3–5 day challenge and invite your people." },
+        { id:"eW5", points:200, title:"Record 3 authority-building pieces", meta:"Podcast-style clips, deep lives, or trainings that position you as the expert." }
+      ]
+    };
+
+    const monthlyPools = {
+      starter: [
+        { id:"sM1", points:500, title:"Complete 20 days of daily tasks this month", meta:"Show up consistently for at least 20 active days." },
+        { id:"sM2", points:500, title:"Host 2 lives or events this month", meta:"Train, share stories, or teach your process twice this month." },
+        { id:"sM3", points:500, title:"Refresh your profile and main link", meta:"Update your bio, photo, and primary link to match your current season." }
+      ],
+      pro: [
+        { id:"pM1", points:800, title:"Complete 25 days of daily tasks this month", meta:"High consistency month — nearly daily momentum." },
+        { id:"pM2", points:800, title:"Launch or relaunch one core offer/system", meta:"Promote your main offer, funnel, or system with intention." },
+        { id:"pM3", points:800, title:"Create a 30-day content theme", meta:"Pick a core topic and thread it through your content all month." }
+      ],
+      elite: [
+        { id:"eM1", points:1200, title:"Complete 28 days of daily tasks this month", meta:"Elite consistency — you moved like a leader all month." },
+        { id:"eM2", points:1200, title:"Run a full launch, challenge, or campaign", meta:"Plan, promote, and close out a focused launch or promo." },
+        { id:"eM3", points:1200, title:"Document your signature process", meta:"Turn your way of doing things into a simple, repeatable framework." }
+      ]
+    };
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem('rewardState_v9');
+        if(raw){
+          const data = JSON.parse(raw);
+          state.done = data.done || {};
+          state.lifetimePoints = data.lifetimePoints || 0;
+          state.lifetimeCredits = data.lifetimeCredits || 0;
+          state.streak = data.streak || 0;
+          state.lastActionDate = data.lastActionDate || null;
+        }
+      }catch(e){}
+    }
+    function saveState(){
+      try{
+        localStorage.setItem('rewardState_v9', JSON.stringify(state));
+      }catch(e){}
+    }
+
+    function tierRank(t){
+      if(t==='starter') return 1;
+      if(t==='pro') return 2;
+      if(t==='elite') return 3;
+      return 0;
+    }
+
+    function applyTierLocks(){
+      const r = tierRank(tier);
+      document.querySelectorAll('.tier-starter').forEach(c=>{
+        c.classList.toggle('locked', r < 1);
+      });
+      document.querySelectorAll('.tier-pro').forEach(c=>{
+        c.classList.toggle('locked', r < 2);
+      });
+      document.querySelectorAll('.tier-elite').forEach(c=>{
+        c.classList.toggle('locked', r < 3);
+      });
+
+      const pretty = tier.charAt(0).toUpperCase()+tier.slice(1);
+      document.getElementById('tierPill').textContent = pretty + ' tier';
+
+      const modeInfo = document.getElementById('modeInfo');
+      if(tier === 'free'){
+        modeInfo.textContent = "Free mode · You’re earning credits only. Upgrade to unlock real payout points.";
+      }else{
+        modeInfo.textContent = "Paid mode · You’re earning real payout points. Follow your host’s rules for cashouts.";
+      }
+    }
+
+    function currentPeriodForScope(scope){
+      if(scope === 'weekly') return weekKey;
+      if(scope === 'monthly') return monthKey;
+      return todayKey;
+    }
+
+    function recalcPoints(){
+      let periodPoints = 0;
+      let periodCredits = 0;
+      document.querySelectorAll('.challenge').forEach(ch=>{
+        const id = ch.dataset.id;
+        const scope = ch.dataset.scope || 'daily';
+        const periodKey = currentPeriodForScope(scope);
+        const rec = state.done[id];
+        const pts = parseInt(ch.dataset.points || '0',10) || 0;
+
+        if(rec && rec.scope === scope && rec.period === periodKey){
+          ch.classList.add('done');
+          if(rec.m === 'free'){
+            periodCredits += pts;
+          }else{
+            periodPoints += pts;
+          }
+        }else{
+          ch.classList.remove('done');
+        }
+      });
+
+      if(tier === 'free'){
+        document.getElementById('pointsToday').textContent = periodCredits;
+        document.getElementById('subPointsLine').textContent =
+          "This period: " + periodCredits + " credits · Lifetime: " + state.lifetimeCredits + " credits";
+      }else{
+        document.getElementById('pointsToday').textContent = periodPoints;
+        document.getElementById('subPointsLine').textContent =
+          "This period: " + periodPoints + " pts · Lifetime: " + state.lifetimePoints + " pts";
+      }
+      document.getElementById('streakLine').textContent = "Streak: " + state.streak + " days";
+      applyTierLocks();
+    }
+
+    function registerActionDay(){
+      if(state.lastActionDate === todayKey) return;
+      const yesterday = new Date(Date.now()-86400000).toISOString().slice(0,10);
+      if(state.lastActionDate === yesterday){
+        state.streak = (state.streak || 0) + 1;
+      }else{
+        state.streak = 1;
+      }
+      state.lastActionDate = todayKey;
+    }
+
+    function createChallengeElement(task, scope){
+      const wrap = document.createElement('div');
+      wrap.className = 'challenge';
+      wrap.dataset.id = task.id;
+      wrap.dataset.points = String(task.points);
+      wrap.dataset.scope = scope;
+
+      const main = document.createElement('div');
+      main.className = 'challenge-main';
+      const title = document.createElement('div');
+      title.className = 'challenge-title';
+      title.textContent = task.title;
+      const meta = document.createElement('div');
+      meta.className = 'challenge-meta';
+      meta.textContent = task.meta;
+
+      main.appendChild(title);
+      main.appendChild(meta);
+
+      const side = document.createElement('div');
+      side.className = 'challenge-side';
+      const pts = document.createElement('div');
+      pts.className = 'challenge-points';
+      const unit = (scope === 'daily' && task.id.startsWith('fD')) ? 'credits' : 'pts';
+      pts.textContent = `+${task.points} ` + unit;
+      side.appendChild(pts);
+
+      wrap.appendChild(main);
+      wrap.appendChild(side);
+      return wrap;
+    }
+
+    function renderDaily(){
+      const tiers = ['free','starter','pro','elite'];
+      tiers.forEach(t=>{
+        const containerId = t + 'Daily';
+        const container = document.getElementById(containerId);
+        if(!container) return;
+        container.innerHTML = '';
+        (dailyPools[t] || []).forEach(task=>{
+          const el = createChallengeElement(task,'daily');
+          container.appendChild(el);
+        });
+      });
+    }
+
+    function pickRandomTasks(pool, count){
+      const copy = pool.slice();
+      const selected = [];
+      while(copy.length && selected.length < count){
+        const idx = Math.floor(Math.random() * copy.length);
+        selected.push(copy[idx]);
+        copy.splice(idx,1);
+      }
+      return selected;
+    }
+
+    function planKey(scope, tierKey){
+      if(scope === 'weekly') return 'plan_v9_week_' + weekKey + '_' + tierKey;
+      if(scope === 'monthly') return 'plan_v9_month_' + monthKey + '_' + tierKey;
+      return '';
+    }
+
+    function getOrCreatePlan(scope, tierKey, count){
+      const key = planKey(scope, tierKey);
+      if(!key) return [];
+      try{
+        const raw = localStorage.getItem(key);
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(Array.isArray(parsed) && parsed.length){
+            return parsed;
+          }
+        }
+      }catch(e){}
+      const pool = (scope === 'weekly' ? weeklyPools : monthlyPools)[tierKey] || [];
+      const chosen = pickRandomTasks(pool, count);
+      try{
+        localStorage.setItem(key, JSON.stringify(chosen));
+      }catch(e){}
+      return chosen;
+    }
+
+    function renderWeeklyMonthly(){
+      const starterWeeklyEl = document.getElementById('starterWeekly');
+      const proWeeklyEl = document.getElementById('proWeekly');
+      const eliteWeeklyEl = document.getElementById('eliteWeekly');
+      if(starterWeeklyEl){
+        starterWeeklyEl.innerHTML = '';
+        getOrCreatePlan('weekly','starter',3).forEach(task=>{
+          starterWeeklyEl.appendChild(createChallengeElement(task,'weekly'));
+        });
+      }
+      if(proWeeklyEl){
+        proWeeklyEl.innerHTML = '';
+        getOrCreatePlan('weekly','pro',3).forEach(task=>{
+          proWeeklyEl.appendChild(createChallengeElement(task,'weekly'));
+        });
+      }
+      if(eliteWeeklyEl){
+        eliteWeeklyEl.innerHTML = '';
+        getOrCreatePlan('weekly','elite',3).forEach(task=>{
+          eliteWeeklyEl.appendChild(createChallengeElement(task,'weekly'));
+        });
+      }
+
+      const starterMonthlyEl = document.getElementById('starterMonthly');
+      const proMonthlyEl = document.getElementById('proMonthly');
+      const eliteMonthlyEl = document.getElementById('eliteMonthly');
+      if(starterMonthlyEl){
+        starterMonthlyEl.innerHTML = '';
+        getOrCreatePlan('monthly','starter',2).forEach(task=>{
+          starterMonthlyEl.appendChild(createChallengeElement(task,'monthly'));
+        });
+      }
+      if(proMonthlyEl){
+        proMonthlyEl.innerHTML = '';
+        getOrCreatePlan('monthly','pro',2).forEach(task=>{
+          proMonthlyEl.appendChild(createChallengeElement(task,'monthly'));
+        });
+      }
+      if(eliteMonthlyEl){
+        eliteMonthlyEl.innerHTML = '';
+        getOrCreatePlan('monthly','elite',2).forEach(task=>{
+          eliteMonthlyEl.appendChild(createChallengeElement(task,'monthly'));
+        });
+      }
+    }
+
+    function initChallenges(){
+      document.querySelectorAll('.challenge').forEach(ch=>{
+        ch.addEventListener('click', ()=>{
+          if(ch.closest('.locked')) return;
+          const id = ch.dataset.id;
+          if(!id) return;
+          const scope = ch.dataset.scope || 'daily';
+          const periodKey = currentPeriodForScope(scope);
+          const rec = state.done[id];
+          if(rec && rec.scope === scope && rec.period === periodKey){
+            return;
+          }
+          const pts = parseInt(ch.dataset.points || '0',10) || 0;
+          const mode = (tier === 'free') ? 'free' : 'paid';
+          state.done[id] = {scope, period: periodKey, m: mode};
+          if(mode === 'free'){
+            state.lifetimeCredits += pts;
+          }else{
+            state.lifetimePoints += pts;
+          }
+          registerActionDay();
+          saveState();
+          recalcPoints();
+        });
+      });
+    }
+
+    function resetVisualForToday(){
+      alert('Checklist refreshed for a new day. Daily tasks already completed today stay locked. Weekly and monthly missions stay locked for their current week/month.');
+      recalcPoints();
+    }
+
+    function switchScreen(name){
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      const target = document.getElementById('screen-'+name);
+      if(target) target.classList.add('active');
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>{
+        n.classList.toggle('active', n.dataset.target===name);
+      });
+    }
+
+    function initNav(){
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(item=>{
+        item.addEventListener('click', ()=>{
+          const target = item.dataset.target;
+          switchScreen(target);
+        });
+      });
+    }
+
+    function loadProfile(){
+      const name = localStorage.getItem('rewardUserName_v9') || '';
+      const email = localStorage.getItem('rewardUserEmail_v9') || '';
+      const payout = localStorage.getItem('rewardUserPayout_v9') || '';
+      const nEl = document.getElementById('userName');
+      const eEl = document.getElementById('userEmail');
+      const pEl = document.getElementById('userPayout');
+      if(nEl) nEl.value = name;
+      if(eEl) eEl.value = email;
+      if(pEl) pEl.value = payout;
+    }
+
+    function saveProfile(){
+      const name = (document.getElementById('userName')?.value || '').trim();
+      const email = (document.getElementById('userEmail')?.value || '').trim();
+      const payout = (document.getElementById('userPayout')?.value || '').trim();
+      localStorage.setItem('rewardUserName_v9', name);
+      localStorage.setItem('rewardUserEmail_v9', email);
+      localStorage.setItem('rewardUserPayout_v9', payout);
+      alert('Profile details saved on this device.');
+    }
+
+    function openPayoutForm(){
+      const base = PAYOUT_FORM_URL;
+      if(!base || !base.startsWith('http')){
+        alert('Host notice: please set PAYOUT_FORM_URL in the app code to your Beacons/Square or Google Form link.');
+        return;
+      }
+      const name = encodeURIComponent(localStorage.getItem('rewardUserName_v9') || '');
+      const email = encodeURIComponent(localStorage.getItem('rewardUserEmail_v9') || '');
+      const payout = encodeURIComponent(localStorage.getItem('rewardUserPayout_v9') || '');
+      let url = base;
+      const params = `name=${name}&email=${email}&payout=${payout}`;
+      url += (base.indexOf('?') === -1 ? '?' : '&') + params;
+      window.open(url, '_blank');
+    }
+
+    function setTier(t){
+      tier = t;
+      localStorage.setItem('rewardTier_v9', tier);
+      applyTierLocks();
+      recalcPoints();
+      console.log('Tier set to', t);
+    }
+
+    loadState();
+    document.addEventListener('DOMContentLoaded', ()=>{
+      renderDaily();
+      renderWeeklyMonthly();
+      initNav();
+      initChallenges();
+      applyTierLocks();
+      recalcPoints();
+      const rb = document.getElementById('resetBtn');
+      if(rb) rb.addEventListener('click', resetVisualForToday);
+      const sb = document.getElementById('saveProfileBtn');
+      if(sb) sb.addEventListener('click', saveProfile);
+      loadProfile();
+    });
+
+    if('serviceWorker' in navigator){
+      window.addEventListener('load', ()=>{
+        navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+      });
+    }
+  </script>
+</body>
+</html>
